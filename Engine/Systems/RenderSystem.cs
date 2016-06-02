@@ -27,8 +27,11 @@ namespace Engine.Systems
         {
             try
             {
-                if (y == -1 && Console.CursorTop == 0) return;
-                if (x == -1 && Console.CursorLeft == 0) return;
+                if (y == -1 && Engine.OrigY == 0) 
+                    return;
+                if (x == -1 && Engine.OrigX == 0) 
+                    return;
+
                 Console.Clear();
                 Console.SetCursorPosition(Engine.OrigX += x, Engine.OrigY += y);
                 Console.Write(s);
@@ -43,7 +46,8 @@ namespace Engine.Systems
         public void WriteAt(string s, int x, int y)
         {
             // for writing anyting to anywhere
-
+            Console.SetCursorPosition(Engine.OrigX += x, Engine.OrigY += y);
+            Console.Write(s);
         }
     }
 }

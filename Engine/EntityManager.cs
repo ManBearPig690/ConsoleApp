@@ -18,11 +18,10 @@ namespace Engine
         public static Dictionary<string, Entity> Entities;
         public static string BallEntity;
 
-        static EntityManager()
+        public static void Initialize()
         {
-            Entities = new Dictionary<string, Entity>();
+            Entities = new Dictionary<string, Entity>();    
         }
-
         
         public static void CreatePlayerEntity(int pX, int pY, int vX, int vY, string characterSymbol)
         {

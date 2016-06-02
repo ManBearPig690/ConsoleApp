@@ -22,7 +22,8 @@ namespace Engine
         public static CollisionSystem CollisionSystem;
         public static RenderSystem RenderSystem;
 
-        static SystemManager()
+        
+        public static void Initialize()
         {
             PlayerComponentEntities = new List<string>();
             CharacterComponentEntities = new List<string>();
@@ -32,14 +33,38 @@ namespace Engine
             MotionSystem = new MotionSystem();
             CollisionSystem = new CollisionSystem();
             InputSystem = new InputSystem();
-            RenderSystem = new RenderSystem();
+            RenderSystem = new RenderSystem();    
         }
 
-        public static void CreateComponentLists(ref Dictionary<string, Entity> entities)
-        {
-            foreach (var entity in entities.Values)
-            {
+        //public static void CreateComponentLists(ref Dictionary<string, Entity> entities)
+        //{
+        //    foreach (var entity in entities.Values)
+        //    {
                 
+        //        var playerComp = entity.GetComponent<PlayerComponent>();
+        //        var charComp = entity.GetComponent<CharacterComponent>();
+        //        var inputComp = entity.GetComponent<InputComponent>();
+        //        var motionComp = entity.GetComponent<MotionComponent>();
+        //        var positionComp = entity.GetComponent<PositionComponent>();
+
+        //        if (playerComp != null)
+        //            PlayerComponentEntities.Add(entity.EntityId);
+        //        if (charComp != null)
+        //            CharacterComponentEntities.Add(entity.EntityId);
+        //        if (inputComp != null)
+        //            InputComponentEntities.Add(entity.EntityId);
+        //        if (motionComp != null)
+        //            MotionComponentEntities.Add(entity.EntityId);
+        //        if (positionComp != null)
+        //            PositionComponentEntities.Add(entity.EntityId);
+        //    }
+        //}
+
+        public static void CreateComponentLists()
+        {
+            foreach (var entity in EntityManager.Entities.Values)
+            {
+
                 var playerComp = entity.GetComponent<PlayerComponent>();
                 var charComp = entity.GetComponent<CharacterComponent>();
                 var inputComp = entity.GetComponent<InputComponent>();

@@ -14,21 +14,26 @@ namespace Engine
         public static int OrigX;
         public static int OrigY;
 
-        static Engine()
+
+        public static void Initialize()
         {
             OrigX = Console.CursorLeft;
             OrigY = Console.CursorTop;
             Console.CursorVisible = false;
+            EntityManager.Initialize();
             EntityManager.CreatePlayerEntity(0, 0, 0, 0, "@");
 
-            SystemManager.CreateComponentLists(ref EntityManager.Entities);
+            //SystemManager.CreateComponentLists(ref EntityManager.Entities);\
+            SystemManager.Initialize();
+            SystemManager.CreateComponentLists();
         }
 
         public static void Run()
         {
+            SystemManager.RenderSystem.WriteAt("@", 0, 0);
             while(running)
             {
-
+                SystemManager.InputSystem.Update(1, ref SystemManager.InputComponentEntities);
             }
         }
     }
