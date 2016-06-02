@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ECS.Component;
-using ECS.Entities;
+using Engine.Component;
+using Engine.Entities;
 
-namespace ECS
+namespace Engine
 {
     /// <summary>
     /// creates and manages entities, could pass params so that they could in turn
@@ -24,7 +24,7 @@ namespace ECS
         }
 
         
-        public static void CreatePlayerEntity(float pX, float pY, float vX, float vY, string characterSymbol)
+        public static void CreatePlayerEntity(int pX, int pY, int vX, int vY, string characterSymbol)
         {
             var playerEntity = new Entities.Entity();
             playerEntity.AddComponent(new PlayerComponent());

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECS.Component
+namespace Engine.Component
 {
     public class CharacterComponent : Component
     {

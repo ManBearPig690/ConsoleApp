@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Component\CharacterComponent.cs" />
     <Compile Include="Component\Component.cs" />
+    <Compile Include="Component\InputComponent.cs" />
     <Compile Include="Component\MotionComponent.cs" />
     <Compile Include="Component\PlayerComponent.cs" />
     <Compile Include="Component\PositionComponent.cs" />

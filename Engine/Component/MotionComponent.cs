@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECS.Component
+namespace Engine.Component
 {
     public class MotionComponent : Component
     {
-        public float VelocityX { get; set; }
-        public float VelocityY { get; set; }
+        public int VelocityX { get; set; }
+        public int VelocityY { get; set; }
 
-        public MotionComponent(float vX, float vY)
+        public MotionComponent(int vX, int vY)
         {
             VelocityX = vX;
             VelocityY = vY;
