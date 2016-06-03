@@ -39,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BspGenerator.cs" />
+    <Compile Include="BSP.cs" />
+    <Compile Include="PCG.cs" />
     <Compile Include="BspRoom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

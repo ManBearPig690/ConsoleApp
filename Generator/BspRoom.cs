@@ -23,7 +23,7 @@ namespace Generator
         private BspRoom _leftChild;
         private BspRoom _rightChiled;
 
-        BspRoom(int x, int y, int w, int h, int size)
+        public BspRoom(int x, int y, int w, int h, int size)
         {
             _x = x;
             _y = y;
@@ -32,7 +32,7 @@ namespace Generator
             _minSize = size;
         }
 
-        bool SplitBsp()
+        public bool SplitBsp()
         {
             var r = new Random((int)DateTime.Now.Ticks);
             if(_leftChild != null) return false; // already split
