@@ -79,8 +79,8 @@ namespace Generator
             RoomX1 = X + ((Width - _minSize) <= 0 ? 0 : random.Next((Width - minX)));
             RoomY1 = Y + ((Height - _minSize) <= 0 ? 0 : random.Next((Height - minY)));
 
-            var randomWidth = random.Next(Width - RoomX1);
-            var randomHeight = random.Next(Height - RoomX1);
+            var randomWidth = (Width - _minSize <=0 ) ? 0 : random.Next(Width - minX);
+            var randomHeight = (Height - _minSize <= 0) ? 0 : random.Next(Height - minY);
             RoomX2 = RoomX1 + (randomWidth > minX ? randomWidth : minX) - 1;
             RoomY2 = RoomY1 + (randomHeight > minY ? randomHeight : minY) - 1;
             IsFilled = true;

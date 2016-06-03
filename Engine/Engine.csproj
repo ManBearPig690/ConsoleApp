@@ -57,6 +57,12 @@
     <Compile Include="Systems\RenderSystem.cs" />
     <Compile Include="Systems\System.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Generator\Generator.csproj">
+      <Project>{c43234bb-8a20-42eb-a296-8b3890cac5f9}</Project>
+      <Name>Generator</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

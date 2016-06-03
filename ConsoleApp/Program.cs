@@ -9,7 +9,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Console.Clear();
-            Engine.Engine.Initialize();
+            Engine.Engine.Initialize(30, 40, 5);
             Engine.Engine.Run();
         }
 
