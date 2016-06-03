@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -96,7 +98,125 @@ namespace Generator
 
         private void ConnectBspRoom(BspRoom room)
         {
+            // if there are children, connect them first
+            if (room.LeftChild != null)
+            {
+                ConnectBspRoom(room.LeftChild);
+                ConnectBspRoom(room.RightChiled);
+            }
+
             
+            if (room.LeftChild == null) return; // if leaf then stop
+
+            // connect based on split direction
+            if (room.Horizontal) // if split horizontally
+            {
+                var midpointX = room.X + room.Width/2; // the midpoint of node
+                if (room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if both are not split create corridor connection from south of left to north of right
+                {
+                    var offset = CheckCorner(midpointX, -1, room.LeftChild.RoomY2, room.RoomY1, room.Horizontal);
+                    for (var i = room.LeftChild.RoomY2; i <= room.RightChiled.RoomY1; i++)
+                    {
+                        if (PcGrid[midpointX + offset][i] == 1 || PcGrid[midpointX + offset][i] == 4) break;
+                        PcGrid[midpointX + offset][i] = 4;
+                    }
+                }
+                else if (room.LeftChild.IsFilled && !room.RightChiled.IsFilled) // if left child is not split, create corridor from south wall of left tomidpoint of right
+                {
+                    var offset = CheckCorner(midpointX, -1, room.LeftChild.RoomY2, room.Y + room.Height - 1,
+                        room.Horizontal);
+                    for (var i = room.RightChiled.RoomY1; i >= room.Y; i--)
+                    {
+                        if (PcGrid[midpointX + offset][i] == 1 || PcGrid[midpointX + offset][i] == 4) break;
+                        PcGrid[midpointX + offset][i] = 4;
+                    }
+                }
+                else if (!room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if right is not split create corridor from north of right to mid of left
+                {
+                    var offset = CheckCorner(midpointX, -1, room.RightChiled.RoomY1, room.Y, room.Horizontal);
+                    for (var i = room.LeftChild.Height/2; i >= room.Y; i--)
+                    {
+                        if (PcGrid[midpointX + offset][i] == 1 || PcGrid[midpointX + offset][i] == 4) break;
+                        PcGrid[midpointX + offset][i] = 4;
+                    }
+                }
+                else // if both children split create corridor from mid left to mid right (connecting nodes of same level i believe)
+                {
+                    var offset = CheckCorner(midpointX, -1, room.LeftChild.Height/2,
+                        room.LeftChild.Height + room.RightChiled.Height - 1, room.Horizontal);
+                    for (var i = room.LeftChild.Height/2; i < room.LeftChild.Height + room.RightChiled.Height; i++)
+                    {
+                        // stop if we're in the second child and have reached a room tile or corridor tile
+                        if ((PcGrid[midpointX + offset][i] == 1 || PcGrid[midpointX + offset][i] == 4) &&
+                            i > room.RightChiled.Y) break;
+                        PcGrid[midpointX + offset][i] = 4;
+                    }
+                }
+            }
+            else // if split vertically
+            {
+                var midPointY = room.Y + room.Height/2;
+                if (room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if bth are not split create from right of left to left of right
+                {
+                    var offset = CheckCorner(room.LeftChild.RoomX2, room.RightChiled.RoomX1, midPointY, -1,
+                        room.Horizontal);
+                    for (var i = room.LeftChild.RoomX2; i <= room.RightChiled.RoomX1; i++)
+                    {
+                        if (PcGrid[i][midPointY + offset] == 1 || PcGrid[i][midPointY + offset] == 4) break;
+                        PcGrid[i][midPointY + offset] = 4;
+                    }
+                }
+                else if (room.LeftChild.IsFilled && !room.RightChiled.IsFilled) // if left is not split create from right wall of left to midpint of right
+                {
+                    var offset = CheckCorner(room.LeftChild.RoomX2, room.X + room.Width - 1, midPointY, -1,
+                        room.Horizontal);
+                    for (var i = room.LeftChild.RoomX2; i < room.X + room.Width; i++)
+                    {
+                        if (PcGrid[i][midPointY + offset] == 1 || PcGrid[i][midPointY + offset] == 4) break;
+                        PcGrid[i][midPointY + offset] = 4;
+                    }
+                }
+                else if(!room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if right is not split create corridor from left wall of right to midpoint of left
+                {
+                    var offset = CheckCorner(room.RightChiled.RoomX1, room.LeftChild.X, midPointY, -1, room.Horizontal);
+                    for (var i = room.RightChiled.RoomX1; i >= room.LeftChild.X; i--)
+                    {
+                        if (PcGrid[i][midPointY + offset] == 1 || PcGrid[i][midPointY + offset] == 4) break;
+                        PcGrid[i][midPointY + offset] = 4;
+                    }
+                }
+                else // if both are split  create corridor from mid of left to mid of right (connecting nodes for same level i believe)
+                {
+                    var offset = CheckCorner(room.LeftChild.Width/2, room.LeftChild.Width + room.RightChiled.Width - 1,
+                        midPointY, -1, room.Horizontal);
+                    for (var i = room.LeftChild.Width/2; i < room.LeftChild.Width + room.RightChiled.Width; i++)
+                    {
+                        // stop if we're in the second child and have reached a room tile or corridor tile
+                        if ((PcGrid[i][midPointY + offset] == 1 || PcGrid[i][midPointY + offset] == 4) && i > room.RightChiled.X) break;
+                        PcGrid[i][midPointY + offset] = 4;
+                    }
+                }
+            }
+        }
+
+        private int CheckCorner(int x1, int x2, int y1, int y2, bool horizontal)
+        {
+            if (horizontal)
+            {
+                if (PcGrid[x1][y1] == 2 && PcGrid[x1 + 1][y1] == 1) return 1; // top right
+                if (PcGrid[x1][y2] == 2 && PcGrid[x1 + 1][y2] == 1) return 1; // bottom right
+                if (PcGrid[x1][y1] == 2 && PcGrid[x1 - 1][y1] == 1) return -1; // top left
+                if (PcGrid[x1][y2] == 2 && PcGrid[x1 - 1][y2] == 1) return -1; // bottom left
+            } 
+            else
+            {
+                if (PcGrid[x1][y1] == 2 && PcGrid[x1][y1 + 1] == 1) return 1; // bottom left
+                if (PcGrid[x2][y2] == 2 && PcGrid[x2][y2 + 1] == 1) return 1; // bottom right
+                if (PcGrid[x1][y1] == 2 && PcGrid[x1][y1 - 1] == 1) return -1; // top left
+                if (PcGrid[x2][y2] == 2 && PcGrid[x2][y2 - 1] == 1) return -1; // top right
+            }
+
+            return 0;
         }
     }
 }

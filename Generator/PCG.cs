@@ -31,8 +31,7 @@ namespace Generator
 
         bool Blocked(int x, int y, int type)
         {
-            if (Bounded(x, y) && PcGrid[x][y] == type) return true;
-            return false;
+            return Bounded(x, y) && PcGrid[x][y] == type;
         }
     }
 }

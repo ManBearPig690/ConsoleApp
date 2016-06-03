@@ -10,8 +10,8 @@ namespace Generator
     public class BspRoom
     {
         private int _minSize;
-        private bool _isFilled = false;
-        private bool _horizontal;
+        
+        
 
         public int X;
         public int Y;
@@ -21,8 +21,10 @@ namespace Generator
         public int RoomY1;
         public int RoomX2;
         public int RoomY2;
+        public bool Horizontal;
         public BspRoom LeftChild;
         public BspRoom RightChiled;
+        public bool IsFilled = false;
 
         public BspRoom(int x, int y, int w, int h, int size)
         {
@@ -44,15 +46,15 @@ namespace Generator
             var r = new Random((int) DateTime.Now.Ticks);
             if (LeftChild != null) return false; // already split
 
-            _horizontal = r.Next(100) > 50;
+            Horizontal = r.Next(100) > 50;
 
-            var maxSize = (_horizontal ? Height : Width) - _minSize; // max height/widht that can be split off
+            var maxSize = (Horizontal ? Height : Width) - _minSize; // max height/widht that can be split off
             if (maxSize <= _minSize) return false; // area to small
 
             var splitPoint = random.Next(maxSize); // generate random split point
             if (splitPoint < _minSize) splitPoint = _minSize; // adjust point so they are both at least the min size
 
-            if (_horizontal)
+            if (Horizontal)
             {
                 LeftChild = new BspRoom(X, Y, Width, splitPoint, _minSize);
                 RightChiled = new BspRoom(X, Y + splitPoint, Width, Height - splitPoint, _minSize);
@@ -81,7 +83,7 @@ namespace Generator
             var randomHeight = random.Next(Height - RoomX1);
             RoomX2 = RoomX1 + (randomWidth > minX ? randomWidth : minX) - 1;
             RoomY2 = RoomY1 + (randomHeight > minY ? randomHeight : minY) - 1;
-            _isFilled = true;
+            IsFilled = true;
         }
 
     }
