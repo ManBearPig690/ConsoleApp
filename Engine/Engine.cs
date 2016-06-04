@@ -53,12 +53,12 @@ namespace Engine
             }
         }
 
-        private static byte[,] InitGrid()
+        private static string[,] InitGrid()
         {
-            var grid = new byte[_gridWidth, _gridHeight];
+            var grid = new string[_gridWidth, _gridHeight];
             for (var i = 0; i < _gridHeight; i++)
                 for (var j = 0; j < _gridWidth; j++)
-                    grid[j, i] = 0;
+                    grid[j, i] = "0";
             return grid;
         }
     }

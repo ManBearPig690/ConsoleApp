@@ -8,7 +8,7 @@ namespace Generator
 {
     public class PCG
     {
-        public byte[,] PcGrid;
+        public string[,] PcGrid;
         public int PcGridWidth;
         public int PcGridHeight;
         public int MinRoomNum;
@@ -20,7 +20,7 @@ namespace Generator
             MinRoomNum = (PcGridHeight*PcGridHeight)/100;
         }
 
-        public void GeneratePcg(byte[,] g)
+        public void GeneratePcg(string[,] g)
         {
             PcGrid = g;
         }
@@ -31,7 +31,7 @@ namespace Generator
             return true;
         }
 
-        bool Blocked(int x, int y, int type)
+        bool Blocked(int x, int y, string type)
         {
             return Bounded(x, y) && PcGrid[x, y] == type;
         }
