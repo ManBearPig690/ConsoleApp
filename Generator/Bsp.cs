@@ -114,7 +114,7 @@ namespace Generator
                 var midpointX = room.X + room.Width/2; // the midpoint of node
                 if (room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if both are not split create corridor connection from south of left to north of right
                 {
-                    var offset = CheckCorner(midpointX, -1, room.LeftChild.RoomY2, room.RoomY1, room.Horizontal);
+                    var offset = CheckCorner(midpointX, -1, room.LeftChild.RoomY2, room.RightChiled.RoomY1, room.Horizontal);
                     for (var i = room.LeftChild.RoomY2; i <= room.RightChiled.RoomY1; i++)
                     {
                         if (PcGrid[midpointX + offset, i] == "1" || PcGrid[midpointX + offset, i] == "4") break;
@@ -125,7 +125,7 @@ namespace Generator
                 {
                     var offset = CheckCorner(midpointX, -1, room.LeftChild.RoomY2, room.Y + room.Height - 1,
                         room.Horizontal);
-                    for (var i = room.RightChiled.RoomY1; i >= room.Y; i--)
+                    for (var i = room.LeftChild.RoomY2; i < room.Y + room.Height; i++)
                     {
                         if (PcGrid[midpointX + offset, i] == "1" || PcGrid[midpointX + offset, i] == "4") break;
                         PcGrid[midpointX + offset, i] = "4";
@@ -134,7 +134,7 @@ namespace Generator
                 else if (!room.LeftChild.IsFilled && room.RightChiled.IsFilled) // if right is not split create corridor from north of right to mid of left
                 {
                     var offset = CheckCorner(midpointX, -1, room.RightChiled.RoomY1, room.Y, room.Horizontal);
-                    for (var i = room.LeftChild.Height/2; i >= room.Y; i--)
+                    for (var i = room.RightChiled.RoomY1; i >= room.Y; i--)
                     {
                         if (PcGrid[midpointX + offset, i] == "1" || PcGrid[midpointX + offset, i] == "4") break;
                         PcGrid[midpointX + offset, i] = "4";
@@ -147,8 +147,7 @@ namespace Generator
                     for (var i = room.LeftChild.Height/2; i < room.LeftChild.Height + room.RightChiled.Height; i++)
                     {
                         // stop if we're in the second child and have reached a room tile or corridor tile
-                        if ((PcGrid[midpointX + offset, i] == "1" || PcGrid[midpointX + offset, i] == "4") &&
-                            i > room.RightChiled.Y) break;
+                        if ((PcGrid[midpointX + offset, i] == "1" || PcGrid[midpointX + offset, i] == "4") && i > room.RightChiled.Y) break;
                         PcGrid[midpointX + offset, i] = "4";
                     }
                 }

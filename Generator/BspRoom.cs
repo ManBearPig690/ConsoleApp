@@ -43,10 +43,9 @@ namespace Generator
         {
             var random = new Random((int)DateTime.Now.Ticks); // helps to crate more psudo random numbers
 
-            var r = new Random((int) DateTime.Now.Ticks);
             if (LeftChild != null) return false; // already split
 
-            Horizontal = r.Next(100) > 50;
+            Horizontal = random.Next(100) > 50;
 
             var maxSize = (Horizontal ? Height : Width) - _minSize; // max height/widht that can be split off
             if (maxSize <= _minSize) return false; // area to small
@@ -79,10 +78,16 @@ namespace Generator
             RoomX1 = X + ((Width - _minSize) <= 0 ? 0 : random.Next((Width - minX)));
             RoomY1 = Y + ((Height - _minSize) <= 0 ? 0 : random.Next((Height - minY)));
 
-            var randomWidth = (Width - _minSize <=0 ) ? 0 : random.Next(Width - minX);
-            var randomHeight = (Height - _minSize <= 0) ? 0 : random.Next(Height - minY);
+            //var randomWidth = (Width - _minSize <=0 ) ? 0 : random.Next(Width - RoomX1);
+            //var randomHeight = (Height - _minSize <= 0) ? 0 : random.Next(Height - RoomY1);
+            //RoomX2 = RoomX1 + (randomWidth > minX ? randomWidth : minX) - 1;
+            //RoomY2 = RoomY1 + (randomHeight > minY ? randomHeight : minY) - 1;
+
+            var randomWidth = (Width - RoomX1 <= 0) ? 0 : random.Next(Width - RoomX1);
+            var randomHeight = (Height - RoomY1 <= 0) ? 0 : random.Next(Height - RoomY1);
             RoomX2 = RoomX1 + (randomWidth > minX ? randomWidth : minX) - 1;
             RoomY2 = RoomY1 + (randomHeight > minY ? randomHeight : minY) - 1;
+
             IsFilled = true;
         }
 
