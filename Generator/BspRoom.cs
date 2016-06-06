@@ -73,8 +73,8 @@ namespace Generator
             if (LeftChild != null) return;
 
             var random = new Random((int) DateTime.Now.Ticks);
-            var minX = ((Width * 3 / 4) > _minSize) ? (Width * 3 / 4) : _minSize;
-            var minY = ((Height * 3 / 4) > _minSize) ? (Height * 3 / 4) : _minSize;
+            var minX = (Width * 3 / 4) > _minSize ? (Width * 3 / 4) : _minSize;
+            var minY = (Height * 3 / 4) > _minSize ? (Height * 3 / 4) : _minSize;
             RoomX1 = X + ((Width - _minSize) <= 0 ? 0 : random.Next((Width - minX)));
             RoomY1 = Y + ((Height - _minSize) <= 0 ? 0 : random.Next((Height - minY)));
 

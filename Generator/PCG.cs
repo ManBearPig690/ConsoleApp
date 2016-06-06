@@ -11,13 +11,11 @@ namespace Generator
         public string[,] PcGrid;
         public int PcGridWidth;
         public int PcGridHeight;
-        public int MinRoomNum;
 
         public void UpdateParam(int width, int height)
         {
             PcGridWidth = width;
             PcGridHeight = height;
-            MinRoomNum = (PcGridHeight*PcGridHeight)/100;
         }
 
         public void GeneratePcg(string[,] g)

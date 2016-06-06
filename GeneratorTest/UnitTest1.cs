@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Generator;
+using System.Collections.Generic;
 
 namespace GeneratorTest
 {
@@ -8,26 +9,38 @@ namespace GeneratorTest
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void MarkCellsUnVisited()
         {
-            var grid = new string[40, 30];
-            for (var i = 0; i < 30; i++)
-                for (var j = 0; j < 40; j++)
-                    grid[j, i] = "0";
-            var bsp = new BSP();
-            bsp.UpdateParam(40, 30, (40*30)/100, 5);
-            bsp.GeneratePcgBsp(grid);
+            Map map = new Map(10, 10);
+            map.MarkCellsUnvisited();
 
-
-            for (var i = 0; i < 30; i++)
+            for(var x = 0; x < map.Width; x++)
             {
-                for (var j = 0; j < 40; j++)
+                for(var y = 0; y < map.Height; y++)
                 {
-                    Console.SetCursorPosition(j, i);
-                    Console.Write(bsp.PcGrid[j, i].ToString());
+                    Assert.IsFalse(map[x, y]);
                 }
             }
-                
+        }
+
+        [TestMethod]
+        public void TestPickRandomCellAndMarkItVisited()
+        {
+            Map map = new Map(10, 10);
+            map.MarkCellsUnvisited();
+            map.PickRandomCellAndMarkItVisited();
+
+            int visistedCellCount = 0;
+            for(int x = 0; x < map.Width; x++)
+            {
+                for (int y = 0; y < map.Height; y++)
+                {
+                    if (map[x, y])
+                        visistedCellCount++;
+                }
+            }
+
+            Assert.IsTrue(visistedCellCount == 1);
         }
     }
 }
