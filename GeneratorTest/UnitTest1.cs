@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Generator;
-using System.Collections.Generic;
+using System.Drawing;
 
 namespace GeneratorTest
 {
@@ -11,7 +11,7 @@ namespace GeneratorTest
         [TestMethod]
         public void MarkCellsUnVisited()
         {
-            Map map = new Map(10, 10);
+            var map = new Map(10, 10);
             map.MarkCellsUnvisited();
 
             for(var x = 0; x < map.Width; x++)
@@ -26,14 +26,14 @@ namespace GeneratorTest
         [TestMethod]
         public void TestPickRandomCellAndMarkItVisited()
         {
-            Map map = new Map(10, 10);
+            var map = new Map(10, 10);
             map.MarkCellsUnvisited();
             map.PickRandomCellAndMarkItVisited();
 
-            int visistedCellCount = 0;
-            for(int x = 0; x < map.Width; x++)
+            var visistedCellCount = 0;
+            for(var x = 0; x < map.Width; x++)
             {
-                for (int y = 0; y < map.Height; y++)
+                for (var y = 0; y < map.Height; y++)
                 {
                     if (map[x, y])
                         visistedCellCount++;
@@ -41,6 +41,26 @@ namespace GeneratorTest
             }
 
             Assert.IsTrue(visistedCellCount == 1);
+        }
+
+        [TestMethod]
+        public void TestGeneratorInstantion()
+        {
+            var generator = new Generator.Generator();
+
+            var map = generator.Generate();
+
+            var visitedCellCount = 0;
+            for (var x = 0; x < map.Width; x++)
+            {
+                for (var y = 0; y < map.Height; y++)
+                {
+                    if (map[x, y])
+                        visitedCellCount++;
+                }
+            }
+
+            Assert.IsTrue(visitedCellCount == 1);
         }
     }
 }
