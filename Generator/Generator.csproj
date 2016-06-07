@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSP.cs" />
+    <Compile Include="DirectionType.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="PCG.cs" />
