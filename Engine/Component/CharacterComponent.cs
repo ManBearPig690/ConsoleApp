@@ -14,10 +14,15 @@ namespace Engine.Component
         public int Exp;
         public string CharacterSymbol;
 
-        // stats
-        // skills
-        // abilities
-        // items / Equipment
+        /* todo: create teh following
+         * these don't have to be components just data containers systems may access this data however for calculations and such
+         * stats
+         * skills
+         * abilities
+         * items / Equipment
+         * class => if doing d&d or pathfinder
+         * 
+         */
 
         public CharacterComponent(string characterSymbol)
         {
