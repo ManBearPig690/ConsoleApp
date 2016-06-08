@@ -14,6 +14,7 @@ namespace Generator
     public class Map
     {
         private bool[,] _cells;
+        private readonly List<Point> _visitedCells = new List<Point>(); 
 
         public int Width
         {
@@ -78,6 +79,52 @@ namespace Generator
                     return false;
             }
 
+        }
+
+        public bool AdjacentCellInDirectionIsVisited(Point location, DirectionType direction)
+        {
+            if(!HasAdjacentCellInDirection(location, direction))
+                throw new InvalidOperationException("No adjacent cell exists for the location adn direction provided.");
+
+            switch (direction)
+            {
+                case DirectionType.North:
+                    return this[location.X, location.Y - 1];
+                case DirectionType.West:
+                    return this[location.X - 1, location.Y];
+                case DirectionType.South:
+                    return this[location.X, location.Y + 1];
+                case DirectionType.East:
+                    return this[location.X + 1, location.Y];
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        public void FlagCellAsVisited(Point location)
+        {
+            if (LocationIsOutOfBounds(location)) throw new ArgumentException("Location is outside of Map bounds", "location");
+            if (this[location]) throw new ArgumentException("Location is already visisted", "location");
+
+            this[location] = true;
+            _visitedCells.Add(location);
+        }
+
+        private bool LocationIsOutOfBounds(Point location)
+        {
+            return ((location.X < 0) || (location.X >= Width) || (location.Y < 0) || (location.Y >= Height));
+        }
+
+        public Point GetRandomVisitedCell(Point location)
+        {
+            if (_visitedCells.Count == 0) throw new InvalidOperationException("there are no visied cells to return.");
+            int index = new Random().Next(_visitedCells.Count - 1);
+
+            while (_visitedCells[index] == location)
+            {
+                index = new Random().Next(_visitedCells.Count - 1);
+            }
+            return _visitedCells[index];
         }
     }
 }

@@ -14,6 +14,22 @@ namespace Generator
             map.MarkCellsUnvisited();
             var currentLocation = map.PickRandomCellAndMarkItVisited();
 
+            var directionPicker = new DirectionPicker();
+            var direction = directionPicker.GetNextDirection();
+
+            while (!map.HasAdjacentCellInDirection(currentLocation, direction) ||
+                   map.AdjacentCellInDirectionIsVisited(currentLocation, direction))
+            {
+                if (directionPicker.HasNextDirection)
+                    direction = directionPicker.GetNextDirection();
+                else
+                {
+                    currentLocation = map.GetRandomVisitedCell(currentLocation); // get new previously visied location
+                    directionPicker = new DirectionPicker();
+                    direction = directionPicker.GetNextDirection(); // get a new direction
+                }
+            }
+
             return map;
         }
     }
