@@ -30,5 +30,12 @@ namespace Generator
 
             return directionPicked;
         }
+
+        public bool MustChangeDirection(int changeDirectionModifier)
+        {
+            // 100 will always change
+            // 0 will never change
+            return changeDirectionModifier > new Random().Next(0, 100);
+        }
     }
 }

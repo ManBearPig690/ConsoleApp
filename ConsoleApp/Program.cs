@@ -9,6 +9,7 @@ namespace ConsoleApp
         static void Main(string[] args)
         {
             Console.Clear();
+            
             //Engine.Engine.Initialize(60, 30, 5);
             //Engine.Engine.Run();
             var grid = new string[60, 30];

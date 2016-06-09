@@ -41,9 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BSP.cs" />
+    <Compile Include="Cell.cs" />
     <Compile Include="DirectionPicker.cs" />
-    <Compile Include="DirectionType.cs" />
     <Compile Include="Generator.cs" />
+    <Compile Include="InternalTypes.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="PCG.cs" />
     <Compile Include="BspRoom.cs" />

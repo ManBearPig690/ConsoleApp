@@ -19,7 +19,7 @@ namespace GeneratorTest
             {
                 for(var y = 0; y < map.Height; y++)
                 {
-                    Assert.IsFalse(map[x, y]);
+                    Assert.IsFalse(map[x, y].Visited);
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace GeneratorTest
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    if (map[x, y])
+                    if (map[x, y].Visited)
                         visistedCellCount++;
                 }
             }
@@ -56,12 +56,13 @@ namespace GeneratorTest
             {
                 for (var y = 0; y < map.Height; y++)
                 {
-                    if (map[x, y])
+                    if (map[x, y].Visited)
                         visitedCellCount++;
+                    Console.WriteLine("{0}, {1}: Visited: {2}",x, y, map[x,y].Visited);
                 }
             }
-
-            Assert.IsTrue(visitedCellCount == 1);
+            
+            Assert.IsTrue(visitedCellCount == (map.Width * map.Height)); // will be 100 becuase visistedCellCount returns 
         }
 
         [TestMethod]
@@ -101,10 +102,10 @@ namespace GeneratorTest
             map.MarkCellsUnvisited();
 
             // set cells around the location we're going to use as visited
-            map[1, 0] = true;
-            map[0, 1] = true;
-            map[1, 2] = true;
-            map[2, 1] = true;
+            map[1, 0].Visited = true;
+            map[0, 1].Visited = true;
+            map[1, 2].Visited = true;
+            map[2, 1].Visited = true;
 
             Assert.IsTrue(map.AdjacentCellInDirectionIsVisited(new Point(1, 1), DirectionType.North));
             Assert.IsTrue(map.AdjacentCellInDirectionIsVisited(new Point(1, 1), DirectionType.South));
@@ -166,6 +167,55 @@ namespace GeneratorTest
 
             Assert.IsTrue(((visitedCell == new Point(1, 0)) || (visitedCell == new Point(0, 1)) || (visitedCell == new Point(1, 2))));
             Assert.AreNotEqual(visitedCell, currentCell);
+        }
+
+        [TestMethod]
+        public void TestCreateCorridorBetweenAdjacentCells()
+        {
+            Map map = new Map(10, 10);
+            map.MarkCellsUnvisited();
+
+            map.CreateCorridor(new Point(0, 0), DirectionType.South);
+
+            Assert.IsTrue(map[0, 0].NorthSide == SideType.Wall);
+            Assert.IsTrue(map[0, 0].SouthSide == SideType.Empty);
+            Assert.IsTrue(map[0, 0].WestSide == SideType.Wall);
+            Assert.IsTrue(map[0, 0].EastSide == SideType.Wall);
+
+            Assert.IsTrue(map[0, 1].NorthSide == SideType.Empty);
+            Assert.IsTrue(map[0, 1].SouthSide == SideType.Wall);
+            Assert.IsTrue(map[0, 1].WestSide == SideType.Wall);
+            Assert.IsTrue(map[0, 1].EastSide == SideType.Wall);
+        }
+
+        [TestMethod]
+        public void TestMustChangeDirectionsAlways()
+        {
+            DirectionPicker directionPicker = new DirectionPicker();
+            Assert.IsTrue(directionPicker.MustChangeDirection(100));
+        }
+
+        [TestMethod]
+        public void TestMustChangeDirectionNever()
+        {
+            DirectionPicker directionPicker = new DirectionPicker();
+            Assert.IsFalse(directionPicker.MustChangeDirection(0));
+        }
+
+        [TestMethod]
+        public void TestDirectionPickerChoosesPreviousDirection()
+        {
+            DirectionType previousDirection = DirectionType.West;
+            DirectionPicker directionPicker = new DirectionPicker(previousDirection, 0);
+            Assert.AreEqual(previousDirection, directionPicker.GetNextDirection());
+        }
+
+        [TestMethod]
+        public void TestDirectionPickerChoosesDifferentDirection()
+        {
+            DirectionType previousDirection = DirectionType.West;
+            DirectionPicker directionPicker = new DirectionPicker(previousDirection, 100);
+            Assert.AreNotEqual(previousDirection, directionPicker.GetNextDirection());
         }
     }
 }

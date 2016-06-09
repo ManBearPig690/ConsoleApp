@@ -8,9 +8,11 @@ namespace Generator
 {
     public enum DirectionType
     {
-        North,
-        South,
-        East,
-        West
+        North, South, East, West
+    }
+
+    public enum SideType
+    {
+        Empty, Wall
     }
 }

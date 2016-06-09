@@ -13,8 +13,10 @@ namespace Generator
 {
     public class Map
     {
-        private bool[,] _cells;
-        private readonly List<Point> _visitedCells = new List<Point>(); 
+        public Cell[,] _cells;
+        private readonly List<Point> _visitedCells = new List<Point>();
+
+    #region Properties
 
         public int Width
         {
@@ -26,35 +28,45 @@ namespace Generator
             get { return _cells.GetUpperBound(1) + 1; }
         }
 
-        public bool this[int x, int y]
+        public Cell this[int x, int y]
         {
             get { return _cells[x, y]; }
             set { _cells[x, y] = value; }
         }
 
-        public bool this[Point location]
+        public Cell this[Point location]
         {
             get { return _cells[location.X, location.Y]; }
             set { _cells[location.X, location.Y] = value; }
         }
 
+        public bool AllCellsVisited
+        {
+            get { return _visitedCells.Count == (Width * Height); }
+        }
+
+    #endregion
+        
+
         public Map(int width, int height)
         {
-            _cells = new bool[width, height];
+            _cells = new Cell[width, height];
         }
 
         public void MarkCellsUnvisited()
         {
             for (var x = 0; x < Width; x++)
                 for (var y = 0; y < Height; y++)
-                    _cells[x, y] = false;
+                    _cells[x, y] = new Cell {Visited = false};
+                    
         }
 
         public Point PickRandomCellAndMarkItVisited()
         {
 
             var randomLocation = new Point(new Random().Next(Width - 1), new Random().Next(Height - 1));
-            this[randomLocation] = true;
+            this[randomLocation].Visited = true;
+            _visitedCells.Add(randomLocation);
             return randomLocation;
         }
 
@@ -89,13 +101,13 @@ namespace Generator
             switch (direction)
             {
                 case DirectionType.North:
-                    return this[location.X, location.Y - 1];
+                    return this[location.X, location.Y - 1].Visited;
                 case DirectionType.West:
-                    return this[location.X - 1, location.Y];
+                    return this[location.X - 1, location.Y].Visited;
                 case DirectionType.South:
-                    return this[location.X, location.Y + 1];
+                    return this[location.X, location.Y + 1].Visited;
                 case DirectionType.East:
-                    return this[location.X + 1, location.Y];
+                    return this[location.X + 1, location.Y].Visited;
                 default:
                     throw new InvalidOperationException();
             }
@@ -104,9 +116,9 @@ namespace Generator
         public void FlagCellAsVisited(Point location)
         {
             if (LocationIsOutOfBounds(location)) throw new ArgumentException("Location is outside of Map bounds", "location");
-            if (this[location]) throw new ArgumentException("Location is already visisted", "location");
+            if (this[location].Visited) throw new ArgumentException("Location is already visisted", "location");
 
-            this[location] = true;
+            this[location].Visited = true;
             _visitedCells.Add(location);
         }
 
@@ -125,6 +137,52 @@ namespace Generator
                 index = new Random().Next(_visitedCells.Count - 1);
             }
             return _visitedCells[index];
+        }
+
+        public Point CreateCorridor(Point location, DirectionType direction)
+        {
+            Point target = GetTargetLocation(location, direction);
+
+            switch (direction)
+            {
+                case DirectionType.North:
+                    this[location].NorthSide = SideType.Empty;
+                    this[target].SouthSide = SideType.Empty;
+                    break;
+                case DirectionType.South:
+                    this[location].SouthSide = SideType.Empty;
+                    this[target].NorthSide = SideType.Empty;
+                    break;
+                case DirectionType.West:
+                    this[location].WestSide = SideType.Empty;
+                    this[target].EastSide = SideType.Empty;
+                    break;
+                case DirectionType.East:
+                    this[location].EastSide = SideType.Empty;
+                    this[target].WestSide = SideType.Empty;
+                    break;
+            }
+
+            return target;
+        }
+
+        private Point GetTargetLocation(Point location, DirectionType direction)
+        {
+            if(!HasAdjacentCellInDirection(location, direction)) throw new InvalidOperationException("No adjacent cell exists for the location and direction provided.");
+
+            switch (direction)
+            {
+                case DirectionType.North:
+                    return new Point(location.X, location.Y - 1);
+                case DirectionType.South:
+                    return new Point(location.X, location.Y + 1);
+                case DirectionType.West:
+                    return new Point(location.X - 1, location.Y);
+                case DirectionType.East:
+                    return new Point(location.X + 1, location.Y);
+                default:
+                    throw new InvalidOperationException("");
+            }
         }
     }
 }
