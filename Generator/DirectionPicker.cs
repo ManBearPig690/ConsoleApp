@@ -42,10 +42,22 @@ namespace Generator
 
             do
             {
-                directionPicked = MustChangeDirection ? (DirectionType) new Random().Next(4) : _previousDirection;
+                directionPicked = MustChangeDirection ? (DirectionType)new Random().Next(4) : _previousDirection;
             } while (_directionsPicked.Contains(directionPicked));
 
             _directionsPicked.Add(directionPicked);
+
+            return directionPicked;
+        }
+
+        private DirectionType PickDifferentDirection() // causes issues with the generation loop basically hangin indeffinatly
+        {
+            DirectionType directionPicked;
+
+            do
+            {
+                directionPicked = (DirectionType) new Random().Next(4);
+            } while (directionPicked == _previousDirection && _directionsPicked.Count < 3);
 
             return directionPicked;
         }

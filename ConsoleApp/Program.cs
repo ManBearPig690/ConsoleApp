@@ -21,29 +21,29 @@ namespace ConsoleApp
             bsp.GeneratePcgBsp(grid);
 
 
-            //for (var i = 0; i < 30; i++)
-            //{
-            //    for (var j = 0; j < 60; j++)
-            //    {
-            //        Console.SetCursorPosition(j, i);
-            //        switch (bsp.PcGrid[j, i])
-            //        {
-            //            case "2":
-            //                Console.Write("#");
-            //                break;
-            //            case "1":
-            //                Console.Write(".");
-            //                break;
-            //            case "4":
-            //                Console.Write("4");
-            //                break;
-            //            default:
-            //                break;
-            //        }
-            //        //if(bsp.PcGrid[j, i] != "5" && bsp.PcGrid[j, i] != "0")
-            //        //    Console.Write(bsp.PcGrid[j, i]);
-            //    }
-            //}
+            for (var i = 0; i < 30; i++)
+            {
+                for (var j = 0; j < 60; j++)
+                {
+                    Console.SetCursorPosition(j, i);
+                    switch (bsp.PcGrid[j, i])
+                    {
+                        case "2":
+                            Console.Write("#");
+                            break;
+                        case "1":
+                            Console.Write(".");
+                            break;
+                        case "4":
+                            Console.Write(".");
+                            break;
+                        default:
+                            break;
+                    }
+                    //if(bsp.PcGrid[j, i] != "5" && bsp.PcGrid[j, i] != "0")
+                    //    Console.Write(bsp.PcGrid[j, i]);
+                }
+            }
 
             Console.ReadKey();
         }

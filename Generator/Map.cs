@@ -15,7 +15,9 @@ namespace Generator
     {
         public Cell[,] _cells;
         private readonly List<Point> _visitedCells = new List<Point>();
-        private readonly int _changeDirectionModifier;
+        
+
+
     #region Properties
 
         public int Width
@@ -45,19 +47,22 @@ namespace Generator
             get { return _visitedCells.Count == (Width * Height); }
         }
 
+        public IEnumerable<Point> DeadEndCellLocations
+        {
+            get
+            {
+                for(int x = 0; x < Width; x++)
+                    for(int y = 0; y < Height; y++)
+                        if (this[x, y].IsDeadEnd) yield return new Point(x, y);
+            }
+        }
+
     #endregion
         
 
         public Map(int width, int height)
         {
             _cells = new Cell[width, height];
-        }
-
-        public Map(int width, int height, int changeDirectionModifier)
-        {
-            _cells = new Cell[width, height];
-            _changeDirectionModifier = changeDirectionModifier;
-
         }
 
         public void MarkCellsUnvisited()
@@ -148,25 +153,30 @@ namespace Generator
 
         public Point CreateCorridor(Point location, DirectionType direction)
         {
+            return CreateSide(location, direction, SideType.Empty);
+        }
+
+        private Point CreateSide(Point location, DirectionType direction, SideType sideType)
+        {
             Point target = GetTargetLocation(location, direction);
 
             switch (direction)
             {
                 case DirectionType.North:
-                    this[location].NorthSide = SideType.Empty;
-                    this[target].SouthSide = SideType.Empty;
+                    this[location].NorthSide = sideType;
+                    this[target].SouthSide = sideType;
                     break;
                 case DirectionType.South:
-                    this[location].SouthSide = SideType.Empty;
-                    this[target].NorthSide = SideType.Empty;
+                    this[location].SouthSide = sideType;
+                    this[target].NorthSide = sideType;
                     break;
                 case DirectionType.West:
-                    this[location].WestSide = SideType.Empty;
-                    this[target].EastSide = SideType.Empty;
+                    this[location].WestSide = sideType;
+                    this[target].EastSide = sideType;
                     break;
                 case DirectionType.East:
-                    this[location].EastSide = SideType.Empty;
-                    this[target].WestSide = SideType.Empty;
+                    this[location].EastSide = sideType;
+                    this[target].WestSide = sideType;
                     break;
             }
 

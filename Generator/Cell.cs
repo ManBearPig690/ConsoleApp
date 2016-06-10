@@ -44,9 +44,40 @@ namespace Generator
             set { _eastSide = value; }
         }
 
+        public bool IsDeadEnd
+        {
+            get { return WallCount == 3; }
+        }
+
+        public int WallCount
+        {
+            get
+            {
+                int wallCount = 0;
+                if (_northSide == SideType.Wall) wallCount++;
+                if (_southSide == SideType.Wall) wallCount++;
+                if (_westSide == SideType.Wall) wallCount++;
+                if (_eastSide == SideType.Wall) wallCount++;
+                return wallCount;
+
+            }
+        }
+
         public Cell()
         {
             
+        }
+
+        public DirectionType CalculateDeadEndCorridorDirection()
+        {
+            if(!IsDeadEnd) throw new InvalidOperationException();
+
+            if(_northSide == SideType.Empty) return DirectionType.North;
+            if(_southSide == SideType.Empty) return DirectionType.South;
+            if(_westSide == SideType.Empty) return DirectionType.West;
+            if(_eastSide == SideType.Empty) return DirectionType.East;
+
+            throw new InvalidOperationException();
         }
     }
 }
