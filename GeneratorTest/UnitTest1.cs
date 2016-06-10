@@ -49,7 +49,7 @@ namespace GeneratorTest
         {
             var generator = new Generator.Generator();
 
-            var map = generator.Generate();
+            var map = generator.Generate(10, 10, 100);
 
             var visitedCellCount = 0;
             for (var x = 0; x < map.Width; x++)
@@ -128,7 +128,7 @@ namespace GeneratorTest
         [TestMethod]
         public void TestGetNextDirectionValidDirection()
         {
-            DirectionPicker directionPicker = new DirectionPicker();
+            DirectionPicker directionPicker = new DirectionPicker(DirectionType.North, 100);
             List<DirectionType> directionsPicked = new List<DirectionType>();
 
             for (int i = 0; i < 4; i++)
@@ -146,7 +146,7 @@ namespace GeneratorTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestGetNextDirectionThrowsException()
         {
-            DirectionPicker directionPicker = new DirectionPicker();
+            DirectionPicker directionPicker = new DirectionPicker(DirectionType.North, 100);
             for (int i = 0; i < 5; i++)
                 directionPicker.GetNextDirection();
         }
@@ -191,15 +191,15 @@ namespace GeneratorTest
         [TestMethod]
         public void TestMustChangeDirectionsAlways()
         {
-            DirectionPicker directionPicker = new DirectionPicker();
-            Assert.IsTrue(directionPicker.MustChangeDirection(100));
+            DirectionPicker directionPicker = new DirectionPicker(DirectionType.North, 100);
+            Assert.IsTrue(directionPicker.MustChangeDirection);
         }
 
         [TestMethod]
         public void TestMustChangeDirectionNever()
         {
-            DirectionPicker directionPicker = new DirectionPicker();
-            Assert.IsFalse(directionPicker.MustChangeDirection(0));
+            DirectionPicker directionPicker = new DirectionPicker(DirectionType.North, 100);
+            Assert.IsFalse(directionPicker.MustChangeDirection);
         }
 
         [TestMethod]
@@ -217,5 +217,36 @@ namespace GeneratorTest
             DirectionPicker directionPicker = new DirectionPicker(previousDirection, 100);
             Assert.AreNotEqual(previousDirection, directionPicker.GetNextDirection());
         }
+
+        [TestMethod]
+        public void TestGeneratorWithNeverChangeDirection()
+        {
+            var generator = new Generator.Generator();
+            var map = new Map(10, 10, 0);
+
+            int visitedCellCount = 0;
+            for(int x = 0; x < map.Width; x++)
+                for(int y = 0; y < map.Height; y++)
+                    if (map[x, y].Visited) visitedCellCount++;
+
+            Assert.IsTrue(visitedCellCount == (map.Height * map.Width));
+        }
+
+        [TestMethod]
+        public void TestGeneratorWithAlwaysChangeDirection()
+        {
+            var generator = new Generator.Generator();
+            var map = new Map(10, 10, 100);
+
+            int visitedCellCount = 0;
+
+            for (int x = 0; x < map.Width; x++)
+                for (int y = 0; y < map.Height; y++)
+                    if (map[x, y].Visited) visitedCellCount++;
+
+            Assert.IsTrue(visitedCellCount == (map.Height * map.Width));
+        }
+
+
     }
 }

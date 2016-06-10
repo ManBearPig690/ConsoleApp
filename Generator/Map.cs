@@ -15,7 +15,7 @@ namespace Generator
     {
         public Cell[,] _cells;
         private readonly List<Point> _visitedCells = new List<Point>();
-
+        private readonly int _changeDirectionModifier;
     #region Properties
 
         public int Width
@@ -51,6 +51,13 @@ namespace Generator
         public Map(int width, int height)
         {
             _cells = new Cell[width, height];
+        }
+
+        public Map(int width, int height, int changeDirectionModifier)
+        {
+            _cells = new Cell[width, height];
+            _changeDirectionModifier = changeDirectionModifier;
+
         }
 
         public void MarkCellsUnvisited()

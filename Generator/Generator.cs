@@ -8,15 +8,16 @@ namespace Generator
 {
     public class Generator
     {
-        public Map Generate()
+        public Map Generate(int width, int height, int changeDirectionModifier)
         {
-            var map = new Map(10, 10);
+            var map = new Map(width, height);
             map.MarkCellsUnvisited();
             var currentLocation = map.PickRandomCellAndMarkItVisited();
+            var previousDirection = DirectionType.North;
 
             while (!map.AllCellsVisited)
             {
-                var directionPicker = new DirectionPicker();
+                var directionPicker = new DirectionPicker(previousDirection, changeDirectionModifier);
                 var direction = directionPicker.GetNextDirection();
 
                 while (!map.HasAdjacentCellInDirection(currentLocation, direction) ||
@@ -27,13 +28,14 @@ namespace Generator
                     else
                     {
                         currentLocation = map.GetRandomVisitedCell(currentLocation); // get new previously visied location
-                        directionPicker = new DirectionPicker();
+                        directionPicker = new DirectionPicker(previousDirection, changeDirectionModifier);
                         direction = directionPicker.GetNextDirection(); // get a new direction
                     }
                 }
 
                 currentLocation = map.CreateCorridor(currentLocation, direction);
                 map.FlagCellAsVisited(currentLocation);
+                previousDirection = direction;
             }
             return map;
         }
