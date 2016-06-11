@@ -6,13 +6,5 @@ using System.Threading.Tasks;
 
 namespace Generator
 {
-    public enum DirectionType
-    {
-        North, South, East, West
-    }
-
-    public enum SideType
-    {
-        Empty, Wall
-    }
+    
 }

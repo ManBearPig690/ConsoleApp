@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generator
+namespace Generator.BSP
 {
     public class BSP : PCG
     {
