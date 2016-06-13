@@ -15,26 +15,37 @@ namespace Engine.Systems
             foreach (var id in componentEntityList)
             {
                 keyInfo = Console.ReadKey();
+                int prevX = EntityManager.Entities[id].GetComponent<PositionComponent>().PositionX;
+                int prevY = EntityManager.Entities[id].GetComponent<PositionComponent>().PositionY;
+                bool moved = false;
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 0, -1);
+                        moved = SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 0, -1, prevX, prevY);
+                        if (moved)
+                            EntityManager.Entities[id].GetComponent<PositionComponent>().PositionY -= 1;
                         break;
                     case ConsoleKey.DownArrow:
-                        SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 0, 1);
+                        moved = SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 0, 1, prevX, prevY);
+                        if (moved)
+                            EntityManager.Entities[id].GetComponent<PositionComponent>().PositionY += 1;
                         break;
                     case ConsoleKey.LeftArrow:
-                        SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, -1, 0);
+                        moved = SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, -1, 0, prevX, prevY);
+                        if (moved)
+                            EntityManager.Entities[id].GetComponent<PositionComponent>().PositionX -= 1;
                         break;
                     case ConsoleKey.RightArrow:
-                        SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 1, 0);
+                        moved = SystemManager.RenderSystem.MoveTo(EntityManager.Entities[id].GetComponent<CharacterComponent>().CharacterSymbol, 1, 0, prevX, prevY);
+                        if (moved)
+                            EntityManager.Entities[id].GetComponent<PositionComponent>().PositionX += 1;
                         break;
                     case ConsoleKey.Escape:
                         Engine.running = false;
                         break;
                     default:
                         break;
-                }    
+                }
             }
             
 

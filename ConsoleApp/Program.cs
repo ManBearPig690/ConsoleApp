@@ -10,7 +10,7 @@ namespace ConsoleApp
         {
             Console.Clear();
 
-            Engine.Engine.Initialize(60, 30, 5);
+            Engine.Engine.Initialize(60, 30, 5, 25, 23);
             Engine.Engine.Run();
             //var grid = new string[60, 30];
             //for (var i = 0; i < 30; i++)
