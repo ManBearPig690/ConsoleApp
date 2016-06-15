@@ -42,15 +42,16 @@ namespace Generator
             Rooms = new List<Rect>();
             int numRooms = 0;
             bool failed;
-
+            var r = new Random((int)DateTime.Now.Ticks);
             for (int i = 0; i < MaxRooms; i++)
             {
                 // Random width and height
-                var w = new Random((int)DateTime.Now.Ticks).Next(RoomMinSize, RoomMaxSize); // +1 to include max...possibly
-                var h = new Random((int)DateTime.Now.Ticks).Next(RoomMinSize, RoomMaxSize);
+                
+                var w = r.Next(RoomMinSize, RoomMaxSize); // +1 to include max...possibly
+                var h = r.Next(RoomMinSize, RoomMaxSize);
                 // Random position with out going out of bounds
-                var x = new Random((int) DateTime.Now.Ticks).Next(0, Width - w - 1);
-                var y = new Random((int)DateTime.Now.Ticks).Next(0, Height - h - 1);
+                var x = r.Next(0, Width - w - 1);
+                var y = r.Next(0, Height - h - 1);
 
                 // Rect class makes rectagles easier to work with
                 var newRoom = new Rect(x, y, w, h);
@@ -87,7 +88,7 @@ namespace Generator
                             var prevXy = Rooms[numRooms - 1].Center();
 
                             // flip a coin
-                            if (new Random((int)DateTime.Now.Ticks).Next(1) == 1)
+                            if (r.Next(1) == 1)
                             {
                                 // first move horizontally then vertically
                                 CreateXTunnel(prevXy.Item1, newXy.Item1, prevXy.Item2);
