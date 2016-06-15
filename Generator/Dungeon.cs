@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Generator
 {
@@ -14,7 +16,14 @@ namespace Generator
         public int Height { get; set; }
         public const string Wall = "#";
         public const string Ground = ".";
+        private const int RoomMaxSize = 10;
+        private const int RoomMinSize = 6;
+        private const int MaxRooms = 30;
+        public int PlayerStartX { get; set; }
+        public int PlayerStartY { get; set; }
+
         public Tile[,] Map;
+        public List<Rect> Rooms;
 
         public Dungeon(int width, int height)
         {
@@ -30,11 +39,73 @@ namespace Generator
                 for (int y = 0; y < Height; y++)
                     Map[x, y] = new Tile(true);
 
-            var room1 = new Rect(20, 15, 10, 15);
-            var room2 = new Rect(50, 15, 10, 15);
-            CreateRoom(room1);
-            CreateRoom(room2);
-            CreateXTunnel(25, 55, 23);
+            Rooms = new List<Rect>();
+            int numRooms = 0;
+            bool failed;
+
+            for (int i = 0; i < MaxRooms; i++)
+            {
+                // Random width and height
+                var w = new Random((int)DateTime.Now.Ticks).Next(RoomMinSize, RoomMaxSize); // +1 to include max...possibly
+                var h = new Random((int)DateTime.Now.Ticks).Next(RoomMinSize, RoomMaxSize);
+                // Random position with out going out of bounds
+                var x = new Random((int) DateTime.Now.Ticks).Next(0, Width - w - 1);
+                var y = new Random((int)DateTime.Now.Ticks).Next(0, Height - h - 1);
+
+                // Rect class makes rectagles easier to work with
+                var newRoom = new Rect(x, y, w, h);
+                // run through the other rooms and see if they intersect with this one
+                
+                failed = false;
+                foreach (var otherRoom in Rooms)
+                {
+                    if (newRoom.Intersect(otherRoom))
+                    {
+                        failed = true;
+                        break;
+                    }
+                }
+                //failed = Rooms.Any(otherRoom => newRoom.Intersect(otherRoom));
+                if (!failed)
+                    {
+                        // meas there are no intersections so room is valid
+
+                        // "paint" it to the maps tiles
+                        CreateRoom(newRoom);
+                        var newXy = newRoom.Center();
+
+                        if (numRooms == 0)
+                        {
+                            // this is the first room where the player starts
+                            PlayerStartX = newXy.Item1;
+                            PlayerStartY = newXy.Item2;
+                        }
+                        else
+                        {
+                            // all rooms after the first
+                            // connect it to the previsous room 
+                            var prevXy = Rooms[numRooms - 1].Center();
+
+                            // flip a coin
+                            if (new Random((int)DateTime.Now.Ticks).Next(1) == 1)
+                            {
+                                // first move horizontally then vertically
+                                CreateXTunnel(prevXy.Item1, newXy.Item1, prevXy.Item2);
+                                CreateYTunnel(prevXy.Item2, newXy.Item2, newXy.Item1);
+                            }
+                            else
+                            {
+                                // first vertically then horizontally
+                                CreateYTunnel(prevXy.Item2, newXy.Item2, prevXy.Item1);
+                                CreateXTunnel(prevXy.Item1, newXy.Item1, newXy.Item2);
+                            }
+
+                        }
+                    }
+                Rooms.Add(newRoom);
+                numRooms += 1;
+            }
+
         }
 
         public void CreateRoom(Rect room)

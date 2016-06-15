@@ -20,27 +20,20 @@ namespace Engine
         
         private static int _gridWidth;
         private static int _gridHeight;
-        private static int _minRoomSize;
-        private static int _minRoomNum;
-        private static int _playerX;
-        private static int _playerY;
         public static Dungeon Dungeon;
         
-        public static void Initialize(int w, int h, int minRoomSize, int playerX, int playerY)
+        public static void Initialize(int w, int h, int minRoomSize)
         {
             _gridWidth = w;
             _gridHeight = h;
-            _minRoomNum = (_gridWidth*_gridHeight)/100;
-            _minRoomSize = minRoomSize;
             Dungeon = new Dungeon(w, h);
-            _playerX = playerX;
-            _playerY = playerY;
+
 
             OrigX = Console.CursorLeft;
             OrigY = Console.CursorTop;
             Console.CursorVisible = false;
             EntityManager.Initialize();
-            EntityManager.CreatePlayerEntity(playerX, playerY, 0, 0, "@");
+            EntityManager.CreatePlayerEntity(Dungeon.PlayerStartX, Dungeon.PlayerStartY, 0, 0, "@");
 
             //SystemManager.CreateComponentLists(ref EntityManager.Entities);
             SystemManager.Initialize();
@@ -50,8 +43,8 @@ namespace Engine
         public static void Run()
         {
             //SystemManager.RenderSystem.WriteAt("@", _playerX, _playerY);
-            OrigX = _playerX;
-            OrigY = _playerY;
+            OrigX = Dungeon.PlayerStartX;
+            OrigY = Dungeon.PlayerStartY;
             SystemManager.RenderSystem.RenderMap(ref Dungeon);
             SystemManager.RenderSystem.RenderPlayer(ref SystemManager.PlayerComponentEntities);
             while(running)

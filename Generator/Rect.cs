@@ -20,5 +20,17 @@ namespace Generator
             X2 = x + w;
             Y2 = y + h;
         }
+
+        public Tuple<int, int> Center()
+        {
+            var centerX = (X1 + X2)/2;
+            var centerY = (Y1 + Y2)/2;
+            return new Tuple<int, int>(centerX, centerY);
+        }
+
+        public bool Intersect( Rect other)
+        {
+            return (X1 <= other.X2 && X2 >= other.X1 && Y1 <= other.Y2 && Y2 >= other.Y1);
+        }
     }
 }
