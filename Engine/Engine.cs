@@ -22,11 +22,12 @@ namespace Engine
         private static int _gridHeight;
         public static Dungeon Dungeon;
         
-        public static void Initialize(int w, int h, int minRoomSize)
+        public static void Initialize(int w, int h, int minRoomSize, int maxRoomSize, int maxRooms)
         {
             _gridWidth = w;
             _gridHeight = h;
-            Dungeon = new Dungeon(w, h);
+            Dungeon = new Dungeon(width: w, height: h, minRoomSize: minRoomSize, maxRoomSize: maxRoomSize,
+                maxRooms: maxRoomSize);
 
 
             OrigX = Console.CursorLeft;

@@ -10,7 +10,7 @@ namespace ConsoleApp
         {
             Console.Clear();
 
-            Engine.Engine.Initialize(45, 45, 5);
+            Engine.Engine.Initialize(w: 45, h: 45, minRoomSize: 6, maxRoomSize: 10, maxRooms: 30);
             Engine.Engine.Run();
             //var grid = new string[60, 30];
             //for (var i = 0; i < 30; i++)

@@ -14,21 +14,26 @@ namespace Generator
     {
         public int Width { get; set; }
         public int Height { get; set; }
-        public const string Wall = "#";
-        public const string Ground = ".";
-        private const int RoomMaxSize = 10;
-        private const int RoomMinSize = 6;
-        private const int MaxRooms = 30;
+        public int RoomMaxSize { get; set; }
+        public int RoomMinSize { get; set; }
+        public int MaxRooms { get; set; }
         public int PlayerStartX { get; set; }
         public int PlayerStartY { get; set; }
+
+        public const string Wall = "#";
+        public const string Ground = ".";
+        
 
         public Tile[,] Map;
         public List<Rect> Rooms;
 
-        public Dungeon(int width, int height)
+        public Dungeon(int width, int height, int minRoomSize, int maxRoomSize, int maxRooms)
         {
             Width = width;
             Height = height;
+            RoomMinSize = minRoomSize;
+            RoomMaxSize = maxRoomSize;
+            MaxRooms = maxRooms;
             Map = new Tile[Width, Height];
             InitMap();
         }

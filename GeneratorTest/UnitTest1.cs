@@ -15,21 +15,21 @@ namespace GeneratorTest
         [TestMethod]
         public void VisualizeMap()
         {
-            Dungeon _dungeon = new Dungeon(80, 45);
+            Dungeon _dungeon = new Dungeon(80, 45, 6, 10, 30);
 
-        using(StreamWriter sw = new StreamWriter(@"C:\temp\map.txt"))
-        {
-            string lineText;
-            for (int x = 0; x < _dungeon.Width; x++)
+            using(StreamWriter sw = new StreamWriter(@"C:\temp\map.txt"))
             {
-                lineText = "";
+                string lineText;
                 for (int y = 0; y < _dungeon.Height; y++)
                 {
-                    lineText += _dungeon.Map[x, y].Blocked ? " " : ".";
+                    lineText = "";
+                    for (int x = 0; x < _dungeon.Width; x++)
+                    {
+                        lineText += _dungeon.Map[x, y].Blocked ? " " : ".";
+                    }
+                    sw.WriteLine(lineText);
                 }
-                sw.WriteLine(lineText);
-            }
-        }    
+            }    
         }
         
     }
