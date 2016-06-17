@@ -41,11 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\CharacterComponent.cs" />
+    <Compile Include="Component\Core\Class.cs" />
     <Compile Include="Component\Component.cs" />
+    <Compile Include="Component\Core\Feat.cs" />
+    <Compile Include="Component\Core\InternalTypes.cs" />
+    <Compile Include="Component\Core\Spell.cs" />
     <Compile Include="Component\InputComponent.cs" />
     <Compile Include="Component\MotionComponent.cs" />
     <Compile Include="Component\PlayerComponent.cs" />
     <Compile Include="Component\PositionComponent.cs" />
+    <Compile Include="Component\Core\Race.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="EntityManager.cs" />
