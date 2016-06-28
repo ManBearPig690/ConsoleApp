@@ -18,7 +18,7 @@ namespace Engine.Component
         public int CurrentExp { get; set; }
         public string CharacterSymbol;
         public Race Race { get; set; }
-        public Class Class { get; set; }
+        public Class FavoredClass { get; set; }
         public Dictionary<string, int> Skills { get; set; }  // <string> skill name <int> skill level
         public List<Feat> Feats { get; set; } 
 

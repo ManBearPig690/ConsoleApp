@@ -37,7 +37,6 @@ namespace GeneratorTest
         {
             var dungeon = new Dungeon(80, 25, 6, 10, 30);
             int blockedCount = 0;
-            int totalDirections = 3;
             for (int x = 0; x < dungeon.Width; x++)
             {
                 for (int y = 0; y < dungeon.Height; y++)
@@ -78,7 +77,7 @@ namespace GeneratorTest
                     else
                         blockedCount++;
                     
-                    if(blockedCount <= 3)
+                    if(blockedCount == 3)
                         dungeon.Map[x,y].Blocked = true;
                 }
             }
@@ -90,7 +89,7 @@ namespace GeneratorTest
                     var lineText = "";
                     for (var x = 0; x < dungeon.Width; x++)
                     {
-                        lineText += dungeon.Map[x, y].Blocked ? "#" : ".";
+                        lineText += dungeon.Map[x, y].Blocked ? " " : ".";
                     }
                     sw.WriteLine(lineText);
                 }
