@@ -8,14 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace Generator
+namespace Generator.RandomPlot
 {
     public class Dungeon
     {
         public int Width { get; set; }
         public int Height { get; set; }
-        public int RoomMaxSize { get; set; }
-        public int RoomMinSize { get; set; }
+        public int MaxRoomSize { get; set; }
+        public int MinRoomSize { get; set; }
         public int MaxRooms { get; set; }
         public int PlayerStartX { get; set; }
         public int PlayerStartY { get; set; }
@@ -31,8 +31,8 @@ namespace Generator
         {
             Width = width;
             Height = height;
-            RoomMinSize = minRoomSize;
-            RoomMaxSize = maxRoomSize;
+            MinRoomSize = minRoomSize;
+            MaxRoomSize = maxRoomSize;
             MaxRooms = maxRooms;
             Map = new Tile[Width, Height];
             InitMap();
@@ -51,63 +51,67 @@ namespace Generator
             for (int i = 0; i < MaxRooms; i++)
             {
                 // Random width and height
-                
-                var w = r.Next(RoomMinSize, RoomMaxSize); // +1 to include max...possibly
-                var h = r.Next(RoomMinSize, RoomMaxSize);
+
+                var w = r.Next(MinRoomSize, MaxRoomSize); // +1 to include max...possibly
+                var h = r.Next(MinRoomSize, MaxRoomSize);
                 // Random position with out going out of bounds
-                var x = r.Next(0, Width - w - 1);
-                var y = r.Next(0, Height - h - 1);
+                //var x = r.Next(0, Width - w - 1);
+                //var y = r.Next(0, Height - h - 1);
+                //var w = MinRoomSize + r.Next(MaxRoomSize - MinRoomSize + 1);
+                //var h = MinRoomSize + r.Next(MaxRoomSize - MinRoomSize + 1);
+                var x = r.Next(Width - w - 1) + 1;
+                var y = r.Next(Height - h - 1) + 1;
 
                 // Rect class makes rectagles easier to work with
                 var newRoom = new Rect(x, y, w, h);
                 // run through the other rooms and see if they intersect with this one
                 
                 failed = false;
-                foreach (var otherRoom in Rooms)
-                {
-                    if (newRoom.Intersect(otherRoom))
-                    {
-                        failed = true;
-                        break;
-                    }
-                }
-                //failed = Rooms.Any(otherRoom => newRoom.Intersect(otherRoom));
+                //foreach (var otherRoom in Rooms)
+                //{
+                //    if (newRoom.Intersect(otherRoom))
+                //    {
+                //        failed = true;
+                //        break;
+                //    }
+                //}
+                failed = Rooms.Any(otherRoom => newRoom.Intersect(otherRoom));
                 if (!failed)
+                {
+                    // meas there are no intersections so room is valid
+
+                    // "paint" it to the maps tiles
+                    CreateRoom(newRoom);
+                    var newXy = newRoom.Center();
+
+                    if (numRooms == 0)
                     {
-                        // meas there are no intersections so room is valid
+                        // this is the first room where the player starts
+                        PlayerStartX = newXy.Item1;
+                        PlayerStartY = newXy.Item2;
+                    }
+                    else
+                    {
+                        // all rooms after the first
+                        // connect it to the previsous room 
+                        var prevXy = Rooms[numRooms - 1].Center();
 
-                        // "paint" it to the maps tiles
-                        CreateRoom(newRoom);
-                        var newXy = newRoom.Center();
-
-                        if (numRooms == 0)
+                        // flip a coin
+                        if (r.Next(1) == 1)
                         {
-                            // this is the first room where the player starts
-                            PlayerStartX = newXy.Item1;
-                            PlayerStartY = newXy.Item2;
+                            // first move horizontally then vertically
+                            CreateXTunnel(prevXy.Item1, newXy.Item1, prevXy.Item2);
+                            CreateYTunnel(prevXy.Item2, newXy.Item2, newXy.Item1);
                         }
                         else
                         {
-                            // all rooms after the first
-                            // connect it to the previsous room 
-                            var prevXy = Rooms[numRooms - 1].Center();
-
-                            // flip a coin
-                            if (r.Next(1) == 1)
-                            {
-                                // first move horizontally then vertically
-                                CreateXTunnel(prevXy.Item1, newXy.Item1, prevXy.Item2);
-                                CreateYTunnel(prevXy.Item2, newXy.Item2, newXy.Item1);
-                            }
-                            else
-                            {
-                                // first vertically then horizontally
-                                CreateYTunnel(prevXy.Item2, newXy.Item2, prevXy.Item1);
-                                CreateXTunnel(prevXy.Item1, newXy.Item1, newXy.Item2);
-                            }
-
+                            // first vertically then horizontally
+                            CreateYTunnel(prevXy.Item2, newXy.Item2, prevXy.Item1);
+                            CreateXTunnel(prevXy.Item1, newXy.Item1, newXy.Item2);
                         }
+
                     }
+                }
                 Rooms.Add(newRoom);
                 numRooms += 1;
             }
@@ -123,6 +127,7 @@ namespace Generator
                 {
                     Map[x, y].Blocked = false;
                     Map[x, y].BlockSight = false;
+                    Map[x, y].TileType = TileType.Floor;
                 }
             }
         }
@@ -134,6 +139,7 @@ namespace Generator
             {
                 Map[x, y].Blocked = false;
                 Map[x, y].BlockSight = false;
+                Map[x, y].TileType = TileType.Corridor;
             }
         }
 
@@ -145,6 +151,7 @@ namespace Generator
             {
                 Map[x, y].Blocked = false;
                 Map[x, y].BlockSight = false;
+                Map[x, y].TileType = TileType.Corridor;
             }
         }
     }

@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generator
+namespace Generator.RandomPlot
 {
-    
+    public enum TileType
+    {
+        Floor,
+        Wall,
+        Corridor
+    }
 }

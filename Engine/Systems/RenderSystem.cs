@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Engine.Entities;
 using Engine.Component;
 using Generator;
+using Generator.RandomPlot;
 
 namespace Engine.Systems
 {

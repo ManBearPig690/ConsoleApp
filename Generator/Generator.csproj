@@ -43,13 +43,13 @@
     <Compile Include="BSP\BSP.cs" />
     <Compile Include="BSP\PCG.cs" />
     <Compile Include="BSP\BspRoom.cs" />
-    <Compile Include="DungeonGenerator.cs" />
-    <Compile Include="DungeonManager.cs" />
-    <Compile Include="InternalTypes.cs" />
-    <Compile Include="Dungeon.cs" />
+    <Compile Include="Leaf.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="RandomPlot\InternalTypes.cs" />
+    <Compile Include="RandomPlot\Dungeon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rect.cs" />
-    <Compile Include="Tile.cs" />
+    <Compile Include="RandomPlot\Rect.cs" />
+    <Compile Include="RandomPlot\Tile.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

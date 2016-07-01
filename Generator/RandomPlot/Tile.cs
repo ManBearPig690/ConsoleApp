@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Generator
+namespace Generator.RandomPlot
 {
     public class Tile
     {
         public bool Blocked;
         public bool BlockSight;
+        public TileType TileType;
 
         public Tile(bool blocked, bool? blockSight = null)
         {
