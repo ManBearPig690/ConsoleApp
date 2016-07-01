@@ -12,5 +12,6 @@ namespace Engine.Component.Core
 		public int Level { get; set; } // classes can again in level when the player levels -> if using 1 favored class it will be the same as the PC's level
 		public int BaseAttackBonus { get; set; }
 		public int TotalAttacks { get; set; }
+
 	}
 }

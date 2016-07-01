@@ -43,6 +43,8 @@
     <Compile Include="BSP\BSP.cs" />
     <Compile Include="BSP\PCG.cs" />
     <Compile Include="BSP\BspRoom.cs" />
+    <Compile Include="DungeonGenerator.cs" />
+    <Compile Include="DungeonManager.cs" />
     <Compile Include="InternalTypes.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
