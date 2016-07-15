@@ -35,4 +35,14 @@ namespace Engine.Component.Core
     {
         Acrobatics, Appraise, Bluff, Climb, Craft, Diplomacy, DisableDevice, Disguise, EscapeArtist, Fly, HandleAnimal, Heal, Intimidate, KnowledgeArcana, KnowledgeDungeoneering, KnowledgeEngineering, KnowledgeGeography, KnowledgeHistory, KnowledgeLocal, KnowledgeNature, KnowledgeNobility, KnowledgePlanes, KnowledgeReligion, Lingustics, Perception, Perform, Profession, Ride, SenseMotive, SleightOfHand, Spellcraft, Stealth, Survival, Swim, UseMagicDevice
     }
+
+    public enum Dice
+    {
+        D4 = 4,
+        D6 = 6,
+        D8 = 8,
+        D10 = 10,
+        D12 = 12,
+        D20 = 20
+    }
 }
